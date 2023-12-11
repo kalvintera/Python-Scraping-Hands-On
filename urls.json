@@ -1,0 +1,28 @@
+[
+    {
+        "url": "https://thehackernews.com/",
+        "name": "thehackernews",
+        "selenium": "True",
+        "bs4": "True",
+        "pandas": "",
+        "newspaper3K": "True",
+        "paginated": "True",
+        "a_tag_location": "story-link",
+        "page_button_location": "//*[@id=\"Blog1_blog-pager-older-link\"]",
+        "date_tag": "span",
+        "date_location": "author"
+    },
+    {
+        "url": "https://www.olympedia.org/statistics/medal/country",
+        "name": "olympedia",
+        "selenium": "True",
+        "bs4": "",
+        "pandas": "True",
+        "newspaper3K": "",
+        "paginated": "",
+        "a_tag_location": "",
+        "page_button_location": "",
+        "date_tag": "",
+        "date_location": ""
+    }
+]

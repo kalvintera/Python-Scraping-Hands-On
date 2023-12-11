@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name ="twitter:card" content="summary_large_image"></meta>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+  <title>HTML 5 Documentation</title>
+</head>
+<style>
+/* Font */
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
+
+/* Design */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: linear-gradient(1deg, #ada9a9 0%, #eeeded 100%);
+  min-height: 100vh;
+}
+
+body {
+  color: #663560;
+  font-family: 'Quicksand', serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0;
+  padding: 1rem;
+}
+
+.main{
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 7rem;
+    margin-bottom: 10rem;
+}
+
+a:hover {
+  color: #6f4bbb;
+  transition: color 0.2s ease;
+}
+
+img {
+  height: 150%;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.btn {
+  color: #ffffff;
+  padding: 0.8rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  font-weight: 400;
+  display: block;
+  text-align: center;
+  margin: auto;
+  width: 50%;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+}
+
+.btn:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cards_item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+@media (min-width: 80rem) {
+  .cards_item {
+    width: 50%;
+  }
+}
+
+@media (min-width: 56rem) {
+  .cards_item {
+    width: 33.3333%;
+  }
+}
+
+.card {
+  background-color: white;
+  border-radius: 5rem;
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.card_content {
+  padding: 2rem;
+  background: linear-gradient(to bottom left, #8e8786 40%, #663560 100%);
+}
+
+.card_title {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  margin: 0px;
+}
+
+.card_text {
+  color: #ffffff;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 5rem;
+  font-weight: 400;
+}
+
+</style>
+<body>
+  <div class="main">
+    <h1><strong><code> <> Grundlagen von HTML, CSS und JS <> </code> </strong></h1>
+
+    <ul class="cards">
+      <li class="cards_item">
+        <div class="card">
+          <div class="card_image"><img src="../img/html_img.jpg"></div>
+          <div class="card_content" >
+            <h2 class="card_title">HTML</h2>
+            <p class="card_text">HTML, oder Hypertext Markup Language, ist eine Markup-Sprache für das Internet, die die Struktur von Webseiten definiert. <a target="_blank" class="info" href="https://www.freecodecamp.org/news/what-is-html-definition-and-meaning/">[Quelle]</a></p>
+
+            <button class="btn card_btn" id="html_button">Text Hinzufügen</button>
+          </div>
+        </div>
+        <div id="html_container"></div>
+      </li>
+      <li class="cards_item">
+        <div class="card">
+          <div class="card_image"><img src="../img/css_img.jpg"></div>
+          <div class="card_content" id="css_container">
+            <h2 class="card_title">CSS</h2>
+            <p class="card_text">CSS steht für Cascading Style Sheets und ist die Sprache, mit der die visuelle Darstellung von Webseiten gestaltet wird. CSS ist die Sprache, die Webbrowsern mitteilt, wie die verschiedenen Teile einer Webseite dargestellt werden sollen<a target="_blank" class="info" href="https://html.com/css/">[Quelle]</a></p>
+
+            <button class="btn card_btn" id="css_button">Text Ändern</button>
+          </div>
+        </div>
+      </li>
+      <li class="cards_item">
+        <div class="card" >
+          <div class="card_image"><img src="../img/js_img.jpg"></div>
+          <div class="card_content" id="js_card">
+            <h2 class="card_title">Javascript</h2>
+            <p class="card_text">JavaScript ist eine leichtgewichtige Programmiersprache, die von Webentwicklern häufig verwendet wird,
+              um dynamische Interaktionen zu Webseiten, Anwendungen, Servern und sogar Spielen hinzuzufügen.
+              <a target="_blank" class="info" href="https://www.hostinger.com/tutorials/what-is-javascript">[Quelle]</a>
+            </p>
+
+            <button class="btn card_btn" id="js_button">Mehr Lesen</button>
+          </div>
+        </div>
+      </li>
+      <li class="cards_item">
+
+      </li>
+
+    </ul>
+</div>
+<script>
+  document.getElementById("html_button").onclick = () => {
+    const container = document.getElementById("html_container");
+
+
+    if (container.innerHTML === ""){
+      container.innerHTML = `
+        <p style="color:white">JavaScript ist eine Programmiersprache,
+              die hauptsächlich auf der Clientseite für Webseiten verwendet wird.<br>
+              Es ermöglicht die Erstellung interaktiver und dynamischer Webseiten</p>
+      `
+    } else {
+      container.innerHTML = ""
+    }
+
+}
+let isOriginalText = true; // Flag to track the state of the text
+
+document.getElementById("css_button").onclick = () => {
+  const p_tag_css = document.querySelector("#css_container p");
+
+  const text_1 = `CSS steht für Cascading Style Sheets und ist die Sprache, mit der die visuelle Darstellung von Webseiten gestaltet wird. CSS ist die Sprache, die Webbrowsern mitteilt, wie die verschiedenen Teile einer Webseite dargestellt werden sollen<a target="_blank" class="info" href="https://html.com/css/">[Quelle]</a>`;
+  const text_2 = `CSS sollte verwendet werden, um einer Webseite Inhalte hinzuzufügen. Diese Aufgabe wird am besten von Markup-Sprachen wie HTML und XML erledigt. Stattdessen wird CSS verwendet, um Elemente auszuwählen, die bereits auf einer Webseite vorhanden sind, und um festzulegen, wie jedes Element erscheinen soll.<a target="_blank" class="info" href="https://html.com/css/">[Quelle]</a>`;
+
+  if (isOriginalText) {
+    p_tag_css.innerHTML = text_2;
+  } else {
+    p_tag_css.innerHTML = text_1;
+  }
+
+  isOriginalText = !isOriginalText;
+}
+// Function to generate a random color
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+// Add click event listener to the "Javascript" button
+
+document.getElementById("js_button").onclick = () => {
+  const jsCard = document.getElementById('js_card'); // Adjust the selector if needed
+  console.log(getRandomColor())
+  jsCard.style.background = getRandomColor();
+
+};
+</script>
+
+</body>
+</html>

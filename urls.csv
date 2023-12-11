@@ -1,0 +1,3 @@
+﻿url;selenium;bs4;pandas;newspaper3K;paginated;a_tag_location;page_button_location;date_tag;date_location
+https://thehackernews.com/;;True;;True;True;story-link;"//*[@id=""Blog1_blog-pager-older-link""]";span;author
+https://www.olympedia.org/statistics/medal/country;True;;True;;;;;;
