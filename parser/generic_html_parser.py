@@ -94,6 +94,8 @@ class DynamicPageHandler:
 
                 url_dict["url"] = pages_links
                 logger.info(f"{len(url_dict['url']) - 1} neue Seiten zu {url_dict['url'][0]} hinzugefügt")
+                # Browser schließen
+                driver.quit()
 
             else:
                 logger.warning("Keine Paginierungsinformationen verfügbar.")
