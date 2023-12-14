@@ -9,7 +9,7 @@ import pandas as pd
 from config import Config
 
 
-class CsvHandler:
+class FileHandler:
     """
     Eine Klasse zur Handhabung der Konfigurationsdateien im CSV- und JSON-Format.
     Sie liest Konfigurationsdaten aus diesen Dateien und konvertiert sie in eine nutzbare Form.

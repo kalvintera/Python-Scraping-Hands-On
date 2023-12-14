@@ -1,7 +1,7 @@
 from parser.generic_html_parser import DynamicPageHandler
 from parser.html_parser import HtmlParser
 
-from file_manager import CsvHandler
+from file_manager import FileHandler
 
 
 def run():
@@ -13,7 +13,7 @@ def run():
     """
 
     # Initialisierung der Handler für Dateioperationen und HTML-Verarbeitung
-    file_handler = CsvHandler()
+    file_handler = FileHandler()
     dynamic_page_handler = DynamicPageHandler()
     html_handler = HtmlParser()
 
