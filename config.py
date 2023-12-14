@@ -17,7 +17,7 @@ class Config:
         output_path (Path): Pfad zum Verzeichnis für Ausgabedateien.
         delimiter (str): Trennzeichen für CSV-Dateien.
         encoding (str): Zeichenkodierung für Dateien.
-        block_urls (list): Liste von URLs, die vom Scraping ausgeschlossen werden sollen.
+        block_urls_domain (list): Url Domain, die vom Scraping ausgeschlossen werden sollen.
         boolean_cols (list): Liste von Spaltennamen, die boolesche Werte enthalten.
     """
 
@@ -27,7 +27,7 @@ class Config:
     output_path: Path = project_path.joinpath("output")
     delimiter: str = ";"
     encoding: str = "utf-8"
-    block_urls = ["https://thn.news/2lRXV92s"]
+    block_urls_domain = "thn.news"
     boolean_cols = [
         "selenium",
         "pandas",

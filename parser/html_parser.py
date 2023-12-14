@@ -67,7 +67,7 @@ class HtmlParser:
                             sub_links = [
                                 a["href"]
                                 for a in sub_links_raw
-                                if a["href"] not in self.config.block_urls
+                                if self.config.block_urls_domain not in a["href"]
                             ]
                             sub_urls_list += sub_links
                             logger.info(
@@ -125,7 +125,6 @@ class HtmlParser:
 
         articles_final_list.append(pd.DataFrame(articles_list))
         return articles_final_list
-
 
     @staticmethod
     def get_tables_from_html(main_urls_list: List) -> List:
