@@ -1,8 +1,8 @@
 # Python-Scraping-Hands-On
-<p style="text-align: center">
+<div style="text-align: center">
 <img src="img/logo.png" alt="Girl in a jacket" width="400" height="400">
 
-</p>
+</div>
 
 ## Beschreibung
 Das "Python-Scraping-Hands-On"
