@@ -1,6 +1,6 @@
 # Python-Scraping-Hands-On
 <div style="text-align: center">
-<img src="img/logo.png" alt="Girl in a jacket" width="400" height="400">
+<img src="img/logo.png" width="400" height="400">
 
 </div>
 
@@ -9,6 +9,11 @@ Das "Python-Scraping-Hands-On"
 Projekt ist eine umfassende Lernressource für Studierende, die die Grundlagen und fortgeschrittenen Techniken des Web Scraping mit Tools wie Selenium, BeautifulSoup, Newspaper3K und Pandas kennenlernen möchten. Das Projekt demonstriert einen modularen Ansatz zur Entwicklung eines Web-Scrapers und bietet praktische Beispiele für das Scraping verschiedener Webseiten.
 
 ## Projektstruktur
+
+<div style="text-align: center">
+<img src="img/scraper_structure.png" width="700" height="400">
+
+</div>
 
 - **img/:** Enthält Bilder für HTML-Demonstrationen.
 - **output/:** Verzeichnis, in dem gescrapte Inhalte als CSV-Dateien gespeichert werden.
