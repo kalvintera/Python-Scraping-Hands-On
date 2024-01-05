@@ -1,6 +1,6 @@
 # Python-Scraping-Hands-On
-<div style="text-align: center">
-<img src="img/logo.png" width="400" height="400">
+<div style="text-align: center;">
+<img src="img/logo.png" width="400" height="400" style="margin: auto;display: block;">
 
 </div>
 
@@ -11,7 +11,7 @@ Projekt ist eine umfassende Lernressource für Studierende, die die Grundlagen u
 ## Projektstruktur
 
 <div style="text-align: center">
-<img src="img/scraper_structure.png" width="700" height="400">
+<img src="img/scraper_structure.png" width="700" height="400" style="margin: auto;display: block;">
 
 </div>
 
