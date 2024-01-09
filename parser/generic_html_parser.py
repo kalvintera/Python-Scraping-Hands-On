@@ -4,7 +4,11 @@ from typing import List
 
 from loguru import logger
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    ElementNotInteractableException,
+    ElementClickInterceptedException
+)
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -43,28 +47,31 @@ class DynamicPageHandler:
         Returns:
             List: Die aktualisierte Liste mit den extrahierten URLs für jede Seite.
         """
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+
+        # Definiert die Ladestrategie für den Seiteninhalt
+        options.page_load_strategy = "eager"
+
+        driver = webdriver.Chrome(
+            service=ChromeService(ChromeDriverManager().install()),
+            options=options,
+        )
+        # Initialisierung des Wartevorgangs
+        wait = WebDriverWait(driver, 10)
 
         for url_dict in main_urls_list:
             # Überprüfung, ob Paginierungsinformationen vorhanden sind
             if url_dict["paginated"] and url_dict["page_button_location"]:
-                options = webdriver.ChromeOptions()
-                options.add_argument("--headless")
-                # Definiert die Ladestrategie für den Seiteninhalt
-                options.page_load_strategy = "eager"
-                driver = webdriver.Chrome(
-                    service=ChromeService(ChromeDriverManager().install()),
-                    options=options,
-                )
+
                 pages_links = url_dict["url"]
                 driver.get(url_dict["url"][0])
                 logger.info("Warte 10 Sekunden, um eine Bedingung zu erfüllen.")
 
-                # Initialisierung des Wartevorgangs
-                wait = WebDriverWait(driver, 10)
-
                 # Schleife zur Durchquerung der paginierten Seiten
                 pagination_stop = False
                 page_count = 0
+
                 while not pagination_stop and page_count < 2:
                     try:
                         pagination_button = driver.find_element(
@@ -88,7 +95,11 @@ class DynamicPageHandler:
                         pages_links.append(new_page)
                         page_count += 1
                         logger.info(f"Seite {page_count} wird gecrawlt.")
-                    except NoSuchElementException as err:
+                    except (
+                            NoSuchElementException,
+                            ElementNotInteractableException,
+                            ElementClickInterceptedException
+                            ) as err:
                         logger.error(f"Paginierungsschaltfläche nicht gefunden: {err}")
                         pagination_stop = True
 
