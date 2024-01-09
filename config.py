@@ -21,7 +21,7 @@ class Config:
         boolean_cols (list): Liste von Spaltennamen, die boolesche Werte enthalten.
     """
 
-    project_path: Path = Path(__file__).resolve().parent
+    project_path: Path = Path(__file__).parent.resolve()
     urls_csv_path: Path = project_path.joinpath("urls.csv")
     urls_json_path: Path = project_path.joinpath("urls.json")
     output_path: Path = project_path.joinpath("output")
