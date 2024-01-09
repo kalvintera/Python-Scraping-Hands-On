@@ -30,11 +30,6 @@ class FileHandler:
         """
         main_urls_df = pd.read_json(self.config.urls_json_path)
 
-
-        # Validiert und konvertiert boolesche Werte
-        boolean_cols_validate = [col for col in main_urls_df.columns if col in self.config.boolean_cols]
-        main_urls_df[boolean_cols_validate] = main_urls_df[boolean_cols_validate].astype('bool')
-
         main_urls_list = main_urls_df.to_dict("records")
         return main_urls_list
 
@@ -75,7 +70,7 @@ class FileHandler:
         if output_df_list:
             logger.success("data is being exported as csv...")
             for output in output_df_list:
-                if isinstance(output, pd.DataFrame):
+                if isinstance(output, pd.DataFrame) and not output.empty:
                     name = output['name'].iloc[0]
                     output = output.replace({np.nan: None}).reset_index(drop=True)
                     output.to_csv(
@@ -84,20 +79,11 @@ class FileHandler:
                         ),
                         encoding=self.config.encoding,
                         sep=self.config.delimiter,
+                        index=False
                     )
-                    logger.success("list of dataframes exported successfully")
-                elif isinstance(output, dict):
-                    name = output['name']
-                    output = pd.DataFrame(output).replace({np.nan: None}).reset_index(drop=True)
-                    output.to_csv(
-                        self.config.output_path.joinpath(
-                            f"{name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-                        ),
-                        encoding=self.config.encoding,
-                        sep=self.config.delimiter,
-                        index=False  # Setzen Sie index auf False, um den Index nicht zu speichern
-                    )
-                    logger.success("list of dictionaries exported successfully")
+                    logger.success(f"dataframe {name} exported successfully")
+                else:
+                    logger.warning("dataframe is empty or the output is not a dataframe")
 
         else:
             logger.warning("the output list is empty")
