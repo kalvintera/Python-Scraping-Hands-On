@@ -30,10 +30,6 @@ class FileHandler:
         """
         main_urls_df = pd.read_json(self.config.urls_json_path)
 
-        # Stellt sicher, dass URLs als Listen formatiert sind
-        main_urls_df["url"] = main_urls_df["url"].apply(
-            lambda x: [x] if not isinstance(x, list) else x
-        )
 
         # Validiert und konvertiert boolesche Werte
         boolean_cols_validate = [col for col in main_urls_df.columns if col in self.config.boolean_cols]
@@ -99,6 +95,7 @@ class FileHandler:
                         ),
                         encoding=self.config.encoding,
                         sep=self.config.delimiter,
+                        index=False  # Setzen Sie index auf False, um den Index nicht zu speichern
                     )
                     logger.success("list of dictionaries exported successfully")
 
