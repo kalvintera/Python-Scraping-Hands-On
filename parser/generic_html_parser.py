@@ -1,4 +1,3 @@
-# third part
 import time
 from typing import List
 
@@ -7,7 +6,8 @@ from selenium import webdriver
 from selenium.common.exceptions import (
     NoSuchElementException,
     ElementNotInteractableException,
-    ElementClickInterceptedException
+    ElementClickInterceptedException,
+    TimeoutException
 )
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
@@ -33,7 +33,6 @@ class DynamicPageHandler:
         self.config = Config()
         self.config.initialize_logger()
 
-    # 3.1
     @staticmethod
     def get_paginated_links(main_urls_list: List) -> List:
         """
@@ -83,11 +82,11 @@ class DynamicPageHandler:
                         )
                         logger.info("Warte auf das Klick-Element.")
                         time.sleep(5)
+
                         wait.until(
-                            EC.element_to_be_clickable(
-                                (By.XPATH, url_dict["page_button_location"])
-                            )
+                            EC.element_to_be_clickable(pagination_button)
                         )
+
                         # Klick auf die nächste Seite
                         pagination_button.click()
                         new_page = driver.current_url
@@ -98,7 +97,8 @@ class DynamicPageHandler:
                     except (
                             NoSuchElementException,
                             ElementNotInteractableException,
-                            ElementClickInterceptedException
+                            ElementClickInterceptedException,
+                            TimeoutException
                             ) as err:
                         logger.error(f"Paginierungsschaltfläche nicht gefunden: {err}")
                         pagination_stop = True

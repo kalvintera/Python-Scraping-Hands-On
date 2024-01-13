@@ -1,4 +1,3 @@
-# second part
 import datetime
 from typing import List
 
@@ -17,7 +16,7 @@ class FileHandler:
 
     def __init__(self):
         """
-        Initialisiert die CsvHandler-Instanz und lädt die Konfigurationseinstellungen.
+        Initialisiert die FileHandler-Instanz und lädt die Konfigurationseinstellungen.
         """
         self.config = Config()
 

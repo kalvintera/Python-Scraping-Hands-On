@@ -6,7 +6,11 @@
 
 ## Beschreibung
 Das "Python-Scraping-Hands-On"
-Projekt ist eine umfassende Lernressource für Studierende, die die Grundlagen und fortgeschrittenen Techniken des Web Scraping mit Tools wie Selenium, BeautifulSoup, Newspaper3K und Pandas kennenlernen möchten. Das Projekt demonstriert einen modularen Ansatz zur Entwicklung eines Web-Scrapers und bietet praktische Beispiele für das Scraping verschiedener Webseiten.
+Projekt ist eine umfassende Lernressource für Studierende, welche die Grundlagen und 
+fortgeschrittenen Techniken des Web Scraping mit Tools wie Selenium, BeautifulSoup, 
+Newspaper3K und Pandas kennenlernen möchten. Das Projekt demonstriert einen modularen 
+Ansatz zur Entwicklung eines Web-Scrapers und bietet praktische Beispiele für das Scraping 
+verschiedener Webseiten.
 
 ## Projektstruktur
 
@@ -15,7 +19,7 @@ Projekt ist eine umfassende Lernressource für Studierende, die die Grundlagen u
 
 </div>
 
-- **img/:** Enthält Bilder für HTML-Demonstrationen.
+- **img/:** Enthält Bilder für das README.
 - **output/:** Verzeichnis, in dem gescrapte Inhalte als CSV-Dateien gespeichert werden.
 - **parser/:
 generic_html_parser.py:** Behandelt die Extraktion von Daten aus dynamisch geladenen Webseiten. Verwendet Selenium, um mit JavaScript-basierten Inhalten umzugehen und paginierte Inhalte zu scrapen.
@@ -31,28 +35,32 @@ urls.json/csv: Konfigurationsdateien zur Demonstration des Scrapings mehrerer We
 Das Projekt verwendet folgende Pakete:
 
 - **Selenium:** Ermöglicht die Automatisierung von Webbrowsern, nützlich für das Scraping von dynamischen Inhalten.
-- **BeautifulSoup4:** Bibliothek zum Parsen von HTML und XML Dokumenten, verwendet für das Extrahieren von Daten aus statischen Webseiten.
-- **Requests:** Einfaches HTTP-Bibliothek für Python, genutzt für den Abruf von Webseiten.
+- **BeautifulSoup4:** Bibliothek zum Parsen von HTML und XML Dokumenten. Wird für das Extrahieren von Daten aus statischen Webseiten verwendet.
+- **Requests:** Einfache HTTP-Bibliothek für Python. Wird für den Abruf von Webseiten genutzt.
 - **Pandas:** Datenanalyse-Bibliothek, die unter anderem zum Lesen und Schreiben von Daten in verschiedenen Formaten wie CSV, Excel usw. verwendet wird.
 - **Newspaper3k:** Spezialisiert auf das Extrahieren von Artikelinhalten und -daten, nützlich für das Sammeln von Nachrichtenartikeln.
 - **WebDriver-Manager:** Hilft beim Management der Browser-Treiber für Selenium.
-- **Loguru:** Erweiterte Logging-Bibliothek, die das Logging vereinfacht.
+- **Loguru:** Erweiterte Logging-Bibliothek, welche das Logging vereinfacht.
 - **Python-Dateutil:** Bietet leistungsstarke Erweiterungen zum Standard datetime Modul.
 - **Black, iSort, Pylint:** Werkzeuge zur Codeformatierung und Qualitätskontrolle.
 - **HTML5lib:** Ein kompatibler HTML5-Parser, der in Kombination mit BeautifulSoup verwendet wird.
 - **NumPy:** Grundlegende Paket für wissenschaftliche Berechnungen in Python.
 
 ## Konfigurationsdateien (urls.json und urls.csv)
-Das Projekt verwendet zwei Formate von Konfigurationsdateien: urls.json und urls.csv. Beide dienen demselben Zweck – sie definieren die Webseiten und spezifischen Einstellungen für das Web-Scraping –, bieten aber unterschiedliche Formate, um Flexibilität und Bequemlichkeit in der Handhabung zu ermöglichen.
+Das Projekt verwendet zwei Formate von Konfigurationsdateien: urls.json und urls.csv. 
+Beide dienen demselben Zweck – sie definieren die Webseiten und spezifischen Einstellungen für 
+das Web-Scraping –, bieten aber unterschiedliche Formate, um Flexibilität und Bequemlichkeit 
+in der Handhabung zu ermöglichen.
 
 ### Warum Konfigurationsdateien?
-Konfigurationsdateien sind ein wesentlicher Bestandteil vieler Softwareprojekte, insbesondere wenn Flexibilität und Wiederverwendbarkeit wichtig sind. Im Kontext des Web Scraping ermöglichen sie:
+Konfigurationsdateien sind ein wesentlicher Bestandteil vieler Softwareprojekte, insbesondere wenn 
+Flexibilität und Wiederverwendbarkeit wichtig sind. Im Kontext des Web Scraping ermöglichen sie:
 
 **Modularität:** Durch Auslagern von Scraping-Einstellungen in separate Dateien kann der Code einfacher und wartbarer gestaltet werden.
-Wiederverwendbarkeit: Der gleiche Scraping-Code kann für verschiedene Webseiten verwendet werden, ohne den Code selbst ändern zu müssen.
+
+**Wiederverwendbarkeit**: Der gleiche Scraping-Code kann für verschiedene Webseiten verwendet werden, ohne den Code selbst ändern zu müssen.
 
 **Einfache Anpassungen:** Nicht-technische Benutzer können Scraping-Parameter ändern, ohne in den Code eingreifen zu müssen.
-Best Practices
 
 **Flexibilität und Skalierbarkeit:** Konfigurationsdateien ermöglichen es, die zu scrapenden Webseiten und spezifische Scraping-Parameter (wie CSS-Selektoren, XPath-Ausdrücke, Boolesche Einstellungen für die Verwendung bestimmter Tools usw.) einfach zu verwalten und zu aktualisieren, ohne den Hauptcode des Scrapers ändern zu müssen. Dies macht das Skript flexibler und einfacher zu erweitern.
 
@@ -62,9 +70,11 @@ Best Practices
 
 ### JSON vs. CSV
 **JSON (JavaScript Object Notation):** Ein leichtgewichtiges Daten-Austauschformat, das leicht zu lesen und zu schreiben ist. Ideal für komplexe Datenstrukturen.
+
 **CSV (Comma-Separated Values):** Ein einfaches Format zur Speicherung tabellarischer Daten. Einfacher zu bearbeiten und ideal für einfache, flache Datenstrukturen.
 Beide Formate haben ihre Stärken, und die Wahl hängt von den spezifischen Anforderungen und Vorlieben ab. In diesem Projekt werden beide Formate bereitgestellt, um unterschiedliche Nutzungsszenarien zu unterstützen.
 
+**Datenfelder**:
 
 - **url:** Die URL der Webseite, die gescraped wird.
 - **name:** Ein benutzerfreundlicher Name für die Webseite, der in den Ausgabedateien verwendet wird.
@@ -77,10 +87,19 @@ Beide Formate haben ihre Stärken, und die Wahl hängt von den spezifischen Anfo
 - **page_button_location:** XPath-Lokalisierung des Buttons für die nächste Seite, falls die Seite paginiert ist.
 - **date_tag und date_location:** Bestimmen das HTML-Tag und die Klasse/ID, die das Datum des Artikels oder Inhalts enthalten, falls erforderlich.
 
-Die Konfigurationsdatei ermöglicht eine flexible und anpassbare Definition der Scraping-Parameter für jede Webseite, was den Studierenden hilft, verschiedene Scraping-Techniken und -Methoden zu erlernen und anzuwenden.
-
 ## Anwendung
-Führen Sie **main.py** aus, um den Web-Scraping-Prozess zu starten. Die Ergebnisse werden im **output/-Verzeichnis** gespeichert und können zur Analyse und Weiterverarbeitung verwendet werden.
+
+Abhängigkeiten installieren und das virtualenvironment aktivieren
+
+```bash
+pipenv install
+pipenv shell
+```
+
+Das Skript wird über **main.py** gestartet. Die Ergebnisse werden im **output/-Verzeichnis** gespeichert und können zur Analyse und Weiterverarbeitung verwendet werden.
+```bash
+python main.py
+```
 
 ## Lernziele
 - Verstehen der Grundlagen und erweiterten Techniken des Web Scraping.

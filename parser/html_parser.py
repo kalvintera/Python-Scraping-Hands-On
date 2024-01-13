@@ -1,5 +1,4 @@
-# part 4
-from typing import List
+from typing import List, Union
 
 import pandas as pd
 import requests as rq
@@ -21,11 +20,10 @@ class HtmlParser:
         Initialisiert die HtmlParser-Instanz und konfiguriert den Logger.
         """
         self.config = Config()
-        self.config.initialize_logger(package="requests")
+        self.config.initialize_logger()
 
-    # 4.1
     @staticmethod
-    def _get_soup(url):
+    def _get_soup(url: str) -> Union[BeautifulSoup, None]:
         """
         Erzeugt ein BeautifulSoup-Objekt aus dem Inhalt einer gegebenen URL.
 
@@ -44,7 +42,7 @@ class HtmlParser:
             logger.error(f"the page cannot be parsed. status code -> {req.status_code}")
             return None
 
-    def get_links_from_main_urls(self, main_urls_list: List):
+    def get_links_from_main_urls(self, main_urls_list: List) -> List:
         """
         Extrahiert Links von Webseiten, die in der übergebenen Liste spezifiziert sind.
 
@@ -91,9 +89,11 @@ class HtmlParser:
             List: Eine Liste von Pandas DataFrames, die Informationen zu den extrahierten Artikeln enthalten.
         """
         articles_final_list = []
-        articles_list = []
+
         for url_dict in main_urls_list:
-            if url_dict.get("newspaper3K") and len(url_dict["sublinks"]) > 0:
+            articles_list = []
+
+            if url_dict["newspaper3K"] and len(url_dict["sublinks"]) > 0:
                 logger.info(f"articles found : {len(url_dict['sublinks'])} for url {url_dict['url']}")
 
                 for link in url_dict["sublinks"]:
@@ -106,8 +106,7 @@ class HtmlParser:
                         "name": url_dict["name"],
                         "article_link": link,
                         "title": article.title,
-                        "date": article.publish_date if article.publish_date
-                        else self._get_date(
+                        "date": self._get_date(
                             url=link,
                             date_tag=url_dict["date_tag"],
                             date_location=url_dict["date_location"],
@@ -123,38 +122,9 @@ class HtmlParser:
                     else:
                         logger.warning("article not found!")
 
-        articles_final_list.append(pd.DataFrame(articles_list))
+                articles_final_list.append(pd.DataFrame(articles_list))
+
         return articles_final_list
-
-    @staticmethod
-    def get_tables_from_html(main_urls_list: List) -> List:
-        """
-        Extrahiert Tabellen von Webseiten unter Verwendung von Pandas' read_html.
-
-        Args:
-            main_urls_list (List): Eine Liste von Dictionaries, die URLs und relevante Informationen enthalten.
-
-        Returns:
-            List: Eine Liste von Pandas DataFrames, die die extrahierten Tabellen enthalten.
-        """
-        tables_list = []
-        for url_dict in main_urls_list:
-            if url_dict.get('pandas') and url_dict["pandas"]:
-                try:
-                    url = url_dict['url'][0] if isinstance(url_dict["url"], list) else url_dict['url']
-                    table_dfs_list = pd.read_html(url)
-                    logger.info(f'Total tables: {len(table_dfs_list)}')
-
-                    # Hinzufügen des Namens der Quellseite zu jeder Tabelle
-                    for table_df in table_dfs_list:
-                        table_df['name'] = url_dict["name"]
-                        tables_list.append(table_df)
-                except Exception as e:
-                    logger.error(f"Error reading HTML tables from {url}: {e}")
-            else:
-                logger.error("Pandas key not found or the value is not valid")
-
-        return tables_list
 
     def _get_date(self, url, date_tag: str, date_location: str):
         """
@@ -181,9 +151,8 @@ class HtmlParser:
                     try:
                         date_formatted = parser.parse(date_text).strftime("%d-%m-%Y")
                         return date_formatted
-                    except (AttributeError, ValueError, Exception) as err:
+                    except Exception as err:
                         logger.error(f"date could not be formatted -> {err}")
-
                         return date_text
                 else:
                     logger.warning(f"date could not be extracted!")
@@ -193,3 +162,34 @@ class HtmlParser:
                     f"the article link could not be parsed for date extraction!"
                 )
                 return None
+
+    @staticmethod
+    def get_tables_from_html(main_urls_list: List) -> List:
+        """
+        Extrahiert Tabellen von Webseiten unter Verwendung von Panda's read_html.
+
+        Args:
+            main_urls_list (List): Eine Liste von Dictionaries, die URLs und relevante Informationen enthalten.
+
+        Returns:
+            List: Eine Liste von Pandas DataFrames, die die extrahierten Tabellen enthalten.
+        """
+        tables_list = []
+        for url_dict in main_urls_list:
+            if url_dict["pandas"]:
+                try:
+                    url = url_dict['url'][0] if isinstance(url_dict["url"], list) else url_dict['url']
+                    table_dfs_list = pd.read_html(url)
+                    logger.info(f'Total tables: {len(table_dfs_list)}')
+
+                    # Hinzufügen des Namens der Quellseite zu jeder Tabelle
+                    for index, table_df in enumerate(table_dfs_list):
+                        table_df['name'] = f"{url_dict['name']}_Table_{index}"
+                        tables_list.append(table_df)
+                except Exception as e:
+                    logger.error(f"Error reading HTML tables from {url_dict['url']}: {e}")
+            else:
+                logger.warning("Pandas key not found or the value is not valid")
+
+        return tables_list
+
