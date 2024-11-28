@@ -1,6 +1,5 @@
 import datetime
 from typing import List
-
 from loguru import logger
 import numpy as np
 import pandas as pd
@@ -14,11 +13,11 @@ class FileHandler:
     Sie liest Konfigurationsdaten aus diesen Dateien und konvertiert sie in eine nutzbare Form.
     """
 
-    def __init__(self):
+    def __init__(self, config: Config):
         """
         Initialisiert die FileHandler-Instanz und lädt die Konfigurationseinstellungen.
         """
-        self.config = Config()
+        self.config = config
 
     def create_main_url_dict_from_json(self) -> List:
         """
