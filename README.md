@@ -1,5 +1,5 @@
 # Python-Scraping-Hands-On
-<div style="text-align: center;">
+<div style="text-align: center; align-items: center">
 <img src="img/logo.png" width="400" height="400" style="margin: auto;display: block;">
 
 </div>
