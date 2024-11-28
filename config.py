@@ -1,6 +1,9 @@
 import logging
 from dataclasses import dataclass
 from pathlib import Path
+from fake_useragent import UserAgent
+
+ua = UserAgent()
 
 
 @dataclass
@@ -16,7 +19,6 @@ class Config:
         output_path (Path): Pfad zum Verzeichnis für Ausgabedateien.
         delimiter (str): Trennzeichen für CSV-Dateien.
         encoding (str): Zeichenkodierung für Dateien.
-        block_urls_domain (list): Url Domain, die vom Scraping ausgeschlossen werden sollen.
         boolean_cols (list): Liste von Spaltennamen, die boolesche Werte enthalten.
     """
 
@@ -26,7 +28,7 @@ class Config:
     output_path: Path = project_path.joinpath("output")
     delimiter: str = ";"
     encoding: str = "utf-8"
-    block_urls_domain = "thn.news"
+
     boolean_cols = [
         "selenium",
         "pandas",
@@ -34,6 +36,11 @@ class Config:
         "newspaper3K",
         "paginated"
     ]
+
+    headers = {
+        "User-Agent": ua.random,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    }
 
     @staticmethod
     def initialize_logger(package: str = None):
