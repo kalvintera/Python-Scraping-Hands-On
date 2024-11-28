@@ -1,27 +1,30 @@
 [
     {
-        "url": ["https://thehackernews.com/"],
-        "name": "thehackernews",
+        "url": "https://techcrunch.com/latest/",
+        "name": "techcrunch",
         "selenium": true,
         "bs4": true,
         "pandas": false,
         "newspaper3K": true,
         "paginated": true,
-        "a_tag_location": "story-link",
-        "page_button_location": "//*[@id=\"Blog1_blog-pager-older-link\"]",
+        "a_tag_location_css": "loop-card__title-link",
+        "page_button_location": {
+            "initial": "//*[@id=\"wp--skip-link--target\"]/div[2]/div[1]/div/nav/a",
+            "second": "//*[@id=\"wp--skip-link--target\"]/div[2]/div[1]/div/nav/a[2]"
+        },
         "date_tag": "span",
         "date_location": "author"
     },
     {
-        "url": ["https://www.olympedia.org/statistics/medal/country"],
+        "url": "https://www.olympedia.org/statistics/medal/country",
         "name": "olympedia",
         "selenium": true,
         "bs4": false,
         "pandas": true,
         "newspaper3K": false,
         "paginated": false,
-        "a_tag_location": "",
-        "page_button_location": "",
+        "a_tag_location_css": "",
+        "page_button_location": {},
         "date_tag": "",
         "date_location": ""
     }
