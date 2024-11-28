@@ -1,7 +1,8 @@
-from parser.generic_html_parser import DynamicPageHandler
-from parser.html_parser import HtmlParser
+from src.parser.generic_html_parser import DynamicPageHandler
+from src.parser.html_parser import HtmlParser
 
-from file_manager import FileHandler
+from src.utils.file_manager import FileHandler
+from config import Config
 
 
 def run():
@@ -11,11 +12,14 @@ def run():
     Liest Konfigurationsdaten, extrahiert URLs, verarbeitet dynamische Seiten,
     extrahiert Artikel und Tabellen und exportiert die Ergebnisse in CSV-Dateien.
     """
+    # Initialisierung der Config Klasse
+    config = Config()
+    config.initialize_logger()
 
     # Initialisierung der Handler für Dateioperationen und HTML-Verarbeitung
-    file_handler = FileHandler()
-    dynamic_page_handler = DynamicPageHandler()
-    html_handler = HtmlParser()
+    file_handler = FileHandler(config=config)
+    dynamic_page_handler = DynamicPageHandler(config=config)
+    html_handler = HtmlParser(config=config)
 
     # Konfigurationsdaten aus JSON einlesen
     main_urls_list = file_handler.create_main_url_dict_from_json()
@@ -32,7 +36,8 @@ def run():
 
     # Extrahieren von Artikeln mit Newspaper3K
     articles_list = html_handler.get_articles_with_newspaper(
-        main_urls_list=final_urls_list
+        main_urls_list=final_urls_list,
+        n_articles=5
     )
 
     # Extrahieren von Tabelleninhalten von Webseiten
