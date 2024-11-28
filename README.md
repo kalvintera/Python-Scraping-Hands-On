@@ -19,6 +19,7 @@ verschiedener Webseiten.
 
 </div>
 
+<pre>
 project/
 ├── input/                     # Eingabedaten
 │   ├── urls.json              # Konfigurationsdatei für URLs
@@ -42,8 +43,9 @@ project/
 │   └── config.py              # Projektkonfigurationsdateien
 ├── main.py                    # Einstiegspunkt des Projekts
 ├── README.md                  # Dokumentation des Projekts
-└── requirements.txt           # Abhängigkeiten des Projekts
-
+└── Pipfile                    # Abhängigkeiten des Projekts
+└── Pipfile.lock
+</pre>
 
 - **img/:** Enthält Bilder für das README.
 - **output/:** Verzeichnis, in dem gescrapte Inhalte als CSV-Dateien gespeichert werden.
