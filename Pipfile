@@ -9,7 +9,6 @@ beautifulsoup4 = "*"
 requests = "*"
 pandas = "*"
 newspaper3k = "*"
-webdriver-manager = "*"
 loguru = "*"
 python-dateutil = "*"
 black = "*"
@@ -17,6 +16,9 @@ isort = "*"
 pylint = "*"
 html5lib = "*"
 numpy = "*"
+webdriver-manager = "*"
+lxml = {extras = ["html_clean"], version = "*"}
+fake-useragent = "*"
 
 [dev-packages]
 
