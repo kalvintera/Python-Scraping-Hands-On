@@ -29,13 +29,7 @@ class Config:
     delimiter: str = ";"
     encoding: str = "utf-8"
 
-    boolean_cols = [
-        "selenium",
-        "pandas",
-        "bs4",
-        "newspaper3K",
-        "paginated"
-    ]
+    boolean_cols = ["selenium", "pandas", "bs4", "newspaper3K", "paginated"]
 
     headers = {
         "User-Agent": ua.random,

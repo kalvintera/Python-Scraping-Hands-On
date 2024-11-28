@@ -62,9 +62,7 @@ class HtmlParser:
                     if soup and a_tag_location:
 
                         try:
-                            sub_links_raw = soup.findAll(
-                                "a", class_=a_tag_location
-                            )
+                            sub_links_raw = soup.findAll("a", class_=a_tag_location)
                             sub_links = [a["href"] for a in sub_links_raw]
                             sub_urls_list += sub_links
                             logger.info(
@@ -73,12 +71,16 @@ class HtmlParser:
                         except (AttributeError, Exception) as err:
                             logger.error(f"sublink could not be found {err}")
                     else:
-                        logger.error(f"the page cannot be parsed/a_tag_location key is missing")
+                        logger.error(
+                            f"the page cannot be parsed/a_tag_location key is missing"
+                        )
                 url_dict["sublinks"] = sub_urls_list
         return main_urls_list
 
     @staticmethod
-    def get_articles_with_newspaper(main_urls_list: List, n_articles: int = None) -> List:
+    def get_articles_with_newspaper(
+        main_urls_list: List, n_articles: int = None
+    ) -> List:
         """
         Verwendet die Newspaper3K-Bibliothek, um Artikel von Webseiten zu extrahieren.
 
@@ -95,9 +97,15 @@ class HtmlParser:
             articles_list = []
 
             if url_dict["newspaper3K"] and len(url_dict["sublinks"]) > 0:
-                logger.info(f"articles found : {len(url_dict['sublinks'])} for url {url_dict['url']}")
+                logger.info(
+                    f"articles found : {len(url_dict['sublinks'])} for url {url_dict['url']}"
+                )
                 # Anzahl der Links werden manuell bestimmt
-                sublinks = url_dict["sublinks"][:n_articles] if n_articles else url_dict['sublinks']
+                sublinks = (
+                    url_dict["sublinks"][:n_articles]
+                    if n_articles
+                    else url_dict["sublinks"]
+                )
 
                 for link in sublinks:
                     logger.info(f"downloading article : {link}")
@@ -113,18 +121,24 @@ class HtmlParser:
                             "title": article.title,
                             "date": article.publish_date,
                             "article": article.text,
-                            "tags": "#" + " #".join(article.tags) if article.tags else ""
+                            "tags": (
+                                "#" + " #".join(article.tags) if article.tags else ""
+                            ),
                         }
 
                         # Überprüfen, ob der Artikelinhalt gefunden wurde
                         article_found = article_dict.get("article")
                         if article_found:
                             articles_list.append(article_dict)
-                            logger.success("downloading successful! article added to list")
+                            logger.success(
+                                "downloading successful! article added to list"
+                            )
                         else:
                             logger.warning("article not found!")
                     except (Exception, newspaper.ArticleException) as err:
-                        logger.error(f"Something went wrong while parsing {link} - Error: {err}")
+                        logger.error(
+                            f"Something went wrong while parsing {link} - Error: {err}"
+                        )
 
                 articles_final_list.append(pd.DataFrame(articles_list))
 
@@ -146,17 +160,18 @@ class HtmlParser:
             if url_dict["pandas"]:
                 try:
 
-                    table_dfs_list = pd.read_html(url_dict['url'])
-                    logger.info(f'Total tables: {len(table_dfs_list)}')
+                    table_dfs_list = pd.read_html(url_dict["url"])
+                    logger.info(f"Total tables: {len(table_dfs_list)}")
 
                     # Hinzufügen des Namens der Quellseite zu jeder Tabelle
                     for index, table_df in enumerate(table_dfs_list):
-                        table_df['name'] = f"{url_dict['name']}_Table_{index}"
+                        table_df["name"] = f"{url_dict['name']}_Table_{index}"
                         tables_list.append(table_df)
                 except Exception as e:
-                    logger.error(f"Error reading HTML tables from {url_dict['url']}: {e}")
+                    logger.error(
+                        f"Error reading HTML tables from {url_dict['url']}: {e}"
+                    )
             else:
                 logger.warning("Pandas key not found or the value is not valid")
 
         return tables_list
-

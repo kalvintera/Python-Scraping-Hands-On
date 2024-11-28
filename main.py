@@ -36,8 +36,7 @@ def run():
 
     # Extrahieren von Artikeln mit Newspaper3K
     articles_list = html_handler.get_articles_with_newspaper(
-        main_urls_list=final_urls_list,
-        n_articles=5
+        main_urls_list=final_urls_list, n_articles=5
     )
 
     # Extrahieren von Tabelleninhalten von Webseiten

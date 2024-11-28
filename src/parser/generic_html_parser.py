@@ -7,13 +7,14 @@ from selenium.common.exceptions import (
     NoSuchElementException,
     ElementNotInteractableException,
     ElementClickInterceptedException,
-    TimeoutException
+    TimeoutException,
 )
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+
 # OPTIONAL - Cache Management
 
 
@@ -62,7 +63,7 @@ class DynamicPageHandler:
         driver = webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()),
             options=options,
-        ) # cache_manager=self.cache_manager
+        )  # cache_manager=self.cache_manager
 
         # Initialisierung des Wartevorgangs
         wait = WebDriverWait(driver, 10)
@@ -72,19 +73,29 @@ class DynamicPageHandler:
             if url_dict["paginated"] and url_dict["page_button_location"]:
 
                 pages_links = [url_dict["url"]]
-                logger.info(f"The Method driver.get navigates to page {url_dict['url']}")
+                logger.info(
+                    f"The Method driver.get navigates to page {url_dict['url']}"
+                )
                 driver.get(url_dict["url"])
 
                 # Schleife zur Durchquerung der paginierten Seiten
                 pagination_stop = False
                 page_count = 0
                 # Extrahiere "Next" Button Locations vom URL-DICT
-                pagination_xpath_initial = url_dict["page_button_location"].get("initial", None)
-                pagination_xpath_next = url_dict["page_button_location"].get("second", None)
+                pagination_xpath_initial = url_dict["page_button_location"].get(
+                    "initial", None
+                )
+                pagination_xpath_next = url_dict["page_button_location"].get(
+                    "second", None
+                )
 
                 while not pagination_stop and page_count < 2:
 
-                    pagination_xpath = pagination_xpath_initial if page_count == 0 else pagination_xpath_next
+                    pagination_xpath = (
+                        pagination_xpath_initial
+                        if page_count == 0
+                        else pagination_xpath_next
+                    )
                     try:
                         pagination_button = driver.find_element(
                             By.XPATH, pagination_xpath
@@ -96,9 +107,7 @@ class DynamicPageHandler:
                         logger.info("waiting for button element...")
                         time.sleep(1)
 
-                        wait.until(
-                            EC.element_to_be_clickable(pagination_button)
-                        )
+                        wait.until(EC.element_to_be_clickable(pagination_button))
 
                         # Klick auf die nächste Seite
                         pagination_button.click()
@@ -110,16 +119,18 @@ class DynamicPageHandler:
                         page_count += 1
                         logger.info(f"page {page_count} crawled.")
                     except (
-                            NoSuchElementException,
-                            ElementNotInteractableException,
-                            ElementClickInterceptedException,
-                            TimeoutException
-                            ) as err:
+                        NoSuchElementException,
+                        ElementNotInteractableException,
+                        ElementClickInterceptedException,
+                        TimeoutException,
+                    ) as err:
                         logger.error(f"pagination button not found {err}")
                         pagination_stop = True
 
                 url_dict["url"] = pages_links
-                logger.info(f"{len(url_dict['url']) - 1} new pages added to {url_dict['url']}")
+                logger.info(
+                    f"{len(url_dict['url']) - 1} new pages added to {url_dict['url']}"
+                )
                 # Browser schließen
                 driver.quit()
 
