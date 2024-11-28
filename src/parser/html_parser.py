@@ -1,9 +1,10 @@
-from typing import List, Union
+import time
+from typing import List
 
+import newspaper
 import pandas as pd
 import requests as rq
 from bs4 import BeautifulSoup
-from dateutil import parser
 from loguru import logger
 from newspaper import Article
 
@@ -15,15 +16,15 @@ class HtmlParser:
     Diese Klasse ist verantwortlich für das Parsen von HTML-Seiten. Sie nutzt verschiedene
     Techniken und Bibliotheken, um Daten aus Webseiten zu extrahieren.
     """
-    def __init__(self):
+
+    def __init__(self, config: Config):
         """
         Initialisiert die HtmlParser-Instanz und konfiguriert den Logger.
         """
-        self.config = Config()
-        self.config.initialize_logger()
+        self.config = config
+        # self.config.initialize_logger()
 
-    @staticmethod
-    def _get_soup(url: str) -> Union[BeautifulSoup, None]:
+    def _get_soup(self, url: str) -> BeautifulSoup | None:
         """
         Erzeugt ein BeautifulSoup-Objekt aus dem Inhalt einer gegebenen URL.
 
@@ -33,7 +34,7 @@ class HtmlParser:
         Returns:
             BeautifulSoup: Ein BeautifulSoup-Objekt oder None, falls ein Fehler auftritt.
         """
-        req = rq.get(url)
+        req = rq.get(url, headers=self.config.headers)
         if req.status_code == 200:
             logger.info(f"parsing url -> {url}")
             soup = BeautifulSoup(req.content, "html.parser")
@@ -53,20 +54,18 @@ class HtmlParser:
             List: Die aktualisierte Liste mit extrahierten Links.
         """
         for url_dict in main_urls_list:
-            if url_dict["bs4"]:
+            if url_dict.get("bs4", None):
                 sub_urls_list = []
                 for url in url_dict["url"]:
                     soup = self._get_soup(url=url)
-                    if soup and url_dict.get("a_tag_location"):
+                    a_tag_location = url_dict.get("a_tag_location_css")
+                    if soup and a_tag_location:
+
                         try:
                             sub_links_raw = soup.findAll(
-                                "a", class_=url_dict["a_tag_location"]
+                                "a", class_=a_tag_location
                             )
-                            sub_links = [
-                                a["href"]
-                                for a in sub_links_raw
-                                if self.config.block_urls_domain not in a["href"]
-                            ]
+                            sub_links = [a["href"] for a in sub_links_raw]
                             sub_urls_list += sub_links
                             logger.info(
                                 f"the number of sublink added -> {len(sub_urls_list)} for url {url}"
@@ -78,12 +77,14 @@ class HtmlParser:
                 url_dict["sublinks"] = sub_urls_list
         return main_urls_list
 
-    def get_articles_with_newspaper(self, main_urls_list: List) -> List:
+    @staticmethod
+    def get_articles_with_newspaper(main_urls_list: List, n_articles: int = None) -> List:
         """
         Verwendet die Newspaper3K-Bibliothek, um Artikel von Webseiten zu extrahieren.
 
         Args:
             main_urls_list (List): Eine Liste von Dictionaries, die URLs und relevante Informationen enthalten.
+            n_articles (int): Die Anzahl der Links, die von jeder Liste gescraped werden sollen
 
         Returns:
             List: Eine Liste von Pandas DataFrames, die Informationen zu den extrahierten Artikeln enthalten.
@@ -95,73 +96,39 @@ class HtmlParser:
 
             if url_dict["newspaper3K"] and len(url_dict["sublinks"]) > 0:
                 logger.info(f"articles found : {len(url_dict['sublinks'])} for url {url_dict['url']}")
+                # Anzahl der Links werden manuell bestimmt
+                sublinks = url_dict["sublinks"][:n_articles] if n_articles else url_dict['sublinks']
 
-                for link in url_dict["sublinks"]:
+                for link in sublinks:
                     logger.info(f"downloading article : {link}")
                     article = Article(link)
                     article.download()
-                    article.parse()
-                    # Erstellen eines Dictionaries mit Artikelinformationen
-                    article_dict = {
-                        "name": url_dict["name"],
-                        "article_link": link,
-                        "title": article.title,
-                        "date": self._get_date(
-                            url=link,
-                            date_tag=url_dict["date_tag"],
-                            date_location=url_dict["date_location"],
-                        ),
-                        "article": article.text,
-                    }
+                    time.sleep(2)
+                    try:
+                        article.parse()
+                        # Erstellen eines Dictionaries mit Artikelinformationen
+                        article_dict = {
+                            "name": url_dict["name"],
+                            "article_link": link,
+                            "title": article.title,
+                            "date": article.publish_date,
+                            "article": article.text,
+                            "tags": "#" + " #".join(article.tags) if article.tags else ""
+                        }
 
-                    # Überprüfen, ob der Artikelinhalt gefunden wurde
-                    article_found = article_dict.get("article")
-                    if article_found:
-                        articles_list.append(article_dict)
-                        logger.success("downloading successful! article added to list")
-                    else:
-                        logger.warning("article not found!")
+                        # Überprüfen, ob der Artikelinhalt gefunden wurde
+                        article_found = article_dict.get("article")
+                        if article_found:
+                            articles_list.append(article_dict)
+                            logger.success("downloading successful! article added to list")
+                        else:
+                            logger.warning("article not found!")
+                    except (Exception, newspaper.ArticleException) as err:
+                        logger.error(f"Something went wrong while parsing {link} - Error: {err}")
 
                 articles_final_list.append(pd.DataFrame(articles_list))
 
         return articles_final_list
-
-    def _get_date(self, url, date_tag: str, date_location: str):
-        """
-        Versucht, das Datum eines Artikels von einer Webseite zu extrahieren.
-
-        Args:
-            url (str): URL des Artikels.
-            date_tag (str): HTML-Tag, das das Datum enthält.
-            date_location (str): Klasse oder ID des HTML-Tags.
-
-        Returns:
-            str: Das extrahierte Datum als String oder None, falls kein Datum gefunden wurde.
-        """
-        # Erstellen Sie ein BeautifulSoup-Objekt
-        logger.info(f"article date is being scraped manually")
-        if date_tag and date_location:
-            soup = self._get_soup(url=url)
-            if soup:
-                # das erste Element wird gefunden
-                date_element = soup.find(date_tag, class_=date_location)
-                if date_element:
-                    date_text = date_element.get_text(strip=True)
-                    logger.info(f"date extracted -> {date_text}")
-                    try:
-                        date_formatted = parser.parse(date_text).strftime("%d-%m-%Y")
-                        return date_formatted
-                    except Exception as err:
-                        logger.error(f"date could not be formatted -> {err}")
-                        return date_text
-                else:
-                    logger.warning(f"date could not be extracted!")
-                    return None
-            else:
-                logger.error(
-                    f"the article link could not be parsed for date extraction!"
-                )
-                return None
 
     @staticmethod
     def get_tables_from_html(main_urls_list: List) -> List:
@@ -178,8 +145,8 @@ class HtmlParser:
         for url_dict in main_urls_list:
             if url_dict["pandas"]:
                 try:
-                    url = url_dict['url'][0] if isinstance(url_dict["url"], list) else url_dict['url']
-                    table_dfs_list = pd.read_html(url)
+
+                    table_dfs_list = pd.read_html(url_dict['url'])
                     logger.info(f'Total tables: {len(table_dfs_list)}')
 
                     # Hinzufügen des Namens der Quellseite zu jeder Tabelle
