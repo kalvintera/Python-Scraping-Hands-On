@@ -19,6 +19,32 @@ verschiedener Webseiten.
 
 </div>
 
+project/
+├── input/                     # Eingabedaten
+│   ├── urls.json              # Konfigurationsdatei für URLs
+│   ├── urls.csv               # Alternative Konfigurationsdatei im CSV-Format
+├── output/                    # Ausgabedaten
+│   ├── ....csv                # Gespeicherte Ergebnisse des Scrapings
+│   
+├── templates/                 # HTML-Templates
+│   └── beispiel.html          # Beispiel-Script für JavaScript DOM-Manipulation
+├── img/                       # Bilder für das README
+│   └──x.png                   # Projektübersichtsbild
+├── src/                       # Quellcode
+│   ├── parser/                # Parser-Module
+│   │   ├── generic_html_parser.py # Behandelt JavaScript-basierte Inhalte und Paginierung
+│   │   ├── html_parser.py     # Zentraler Parser für HTML-Inhalte
+│   │   
+│   ├── utils/                 # Hilfsfunktionen und Werkzeuge
+│   │   ├── file_manager.py    # Lesen und Schreiben von Dateien (z. B. Konfiguration und Ergebnisse)
+│   │   
+│   │ 
+│   └── config.py              # Projektkonfigurationsdateien
+├── main.py                    # Einstiegspunkt des Projekts
+├── README.md                  # Dokumentation des Projekts
+└── requirements.txt           # Abhängigkeiten des Projekts
+
+
 - **img/:** Enthält Bilder für das README.
 - **output/:** Verzeichnis, in dem gescrapte Inhalte als CSV-Dateien gespeichert werden.
 - **parser/:
@@ -30,6 +56,8 @@ beispiel.html:** Ein HTML-Script, das zeigt, wie JavaScript DOM-Elemente manipul
 - **file_manager.py:** verantwortlich für das Lesen der Konfigurationsdateien (urls.json/csv) und das Speichern der Ergebnisse. Konvertiert Konfigurationsdaten in nutzbare Formate und exportiert gescrapte Daten in CSV-Dateien.
 - **main.py:** Hauptskript, das den gesamten Scraping-Prozess orchestriert. Ruft Funktionen der anderen Module auf und steuert den Datenfluss.
 urls.json/csv: Konfigurationsdateien zur Demonstration des Scrapings mehrerer Webseiten.
+
+
 
 ## Abhängigkeiten
 Das Projekt verwendet folgende Pakete:
