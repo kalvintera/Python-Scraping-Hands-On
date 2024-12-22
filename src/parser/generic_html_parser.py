@@ -30,12 +30,11 @@ class DynamicPageHandler:
         config (Config): Eine Instanz der Konfigurationsklasse.
     """
 
-    def __init__(self, config: Config, name):
+    def __init__(self, config: Config):
         """
         Initialisiert die DynamicPageHandler-Instanz und setzt die Logger-Konfiguration.
         """
         self.config = config
-        self.name = name
 
     def get_paginated_links(self, main_urls_list: List) -> List:
         """

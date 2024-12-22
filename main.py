@@ -1,6 +1,5 @@
 from src.parser.generic_html_parser import DynamicPageHandler
 from src.parser.html_parser import HtmlParser
-
 from src.utils.file_manager import FileHandler
 from config import Config
 
