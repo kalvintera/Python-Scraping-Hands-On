@@ -8,10 +8,8 @@
         "newspaper3K": true,
         "paginated": true,
         "a_tag_location_css": "loop-card__title-link",
-        "page_button_location": {
-            "initial": "//*[@id=\"wp--skip-link--target\"]/div[2]/div[1]/div/nav/a",
-            "second": "//*[@id=\"wp--skip-link--target\"]/div[2]/div[1]/div/nav/a[2]"
-        },
+        "page_button_location": "wp-block-query-pagination-next",
+        "pop-up-button-id": "didomi-notice-disagree-button",
         "date_tag": "span",
         "date_location": "author"
     },
@@ -29,3 +27,4 @@
         "date_location": ""
     }
 ]
+
