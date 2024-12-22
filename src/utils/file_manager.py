@@ -75,7 +75,7 @@ class FileHandler:
                     output = output.replace({np.nan: None}).reset_index(drop=True)
                     output.to_csv(
                         self.config.output_path.joinpath(
-                            f"{name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+                            f"{name}_{datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')}.csv"
                         ),
                         encoding=self.config.encoding,
                         sep=self.config.delimiter,
