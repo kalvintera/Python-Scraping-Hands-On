@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import List
 
@@ -29,14 +30,14 @@ class DynamicPageHandler:
         config (Config): Eine Instanz der Konfigurationsklasse.
     """
 
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, name):
         """
         Initialisiert die DynamicPageHandler-Instanz und setzt die Logger-Konfiguration.
         """
         self.config = config
+        self.name = name
 
-    @staticmethod
-    def get_paginated_links(main_urls_list: List) -> List:
+    def get_paginated_links(self, main_urls_list: List) -> List:
         """
         Extrahiert Links von paginierten Webseiten.
 
@@ -52,11 +53,13 @@ class DynamicPageHandler:
         options = webdriver.ChromeOptions()
         # Headless ist ein Ausführungsmodus für Firefox- und Chromium-basierte Browser.
         # was bedeutet, dass das Browserfenster nicht sichtbar ist.
-        options.add_argument("--headless")
+        if self.config.start_headless:
+            options.add_argument("--headless")
 
         # Definiert die Ladestrategie für den Seiteninhalt
-        options.page_load_strategy = "eager"
+        # options.page_load_strategy = "eager"
         # driver = webdriver.Chrome(options=options)
+
         """
         
         """
@@ -69,8 +72,16 @@ class DynamicPageHandler:
         wait = WebDriverWait(driver, 10)
 
         for url_dict in main_urls_list:
+
             # Überprüfung, ob Paginierungsinformationen vorhanden sind
             if url_dict["paginated"] and url_dict["page_button_location"]:
+
+                """
+                Besserer Ansatz wäre die direkte Generierung der URLs, da es ein klares Muster gibt:
+                # paginated_links = [f"{url_dict['url']}page/{page_nr}/" for page_nr in range(1, 5)]
+                
+                Es wird aber zu Demonstrationszwecken trotzdem folgend Selenium verwendet
+                """
 
                 pages_links = [url_dict["url"]]
                 logger.info(
@@ -78,28 +89,30 @@ class DynamicPageHandler:
                 )
                 driver.get(url_dict["url"])
 
+                # POP-UP BUTTON
+                popup_location = url_dict.get("pop-up-button-id", None) if not self.config.start_headless else None
+                if popup_location:
+                    try:
+                        popup_button = driver.find_element(By.ID, popup_location)
+                        wait.until(EC.element_to_be_clickable(popup_button))
+                        popup_button.click()
+                    except (Exception, ElementNotInteractableException) as err:
+                        logger.error(f"Pop-up Button not clickable -> {err}")
+
                 # Schleife zur Durchquerung der paginierten Seiten
                 pagination_stop = False
                 page_count = 0
                 # Extrahiere "Next" Button Locations vom URL-DICT
-                pagination_xpath_initial = url_dict["page_button_location"].get(
-                    "initial", None
-                )
-                pagination_xpath_next = url_dict["page_button_location"].get(
-                    "second", None
-                )
+
+                pagination_button_location_css = url_dict.get("page_button_location", "")
 
                 while not pagination_stop and page_count < 2:
 
-                    pagination_xpath = (
-                        pagination_xpath_initial
-                        if page_count == 0
-                        else pagination_xpath_next
-                    )
+                    logging.info(f"scraping page - {page_count}")
+
                     try:
-                        pagination_button = driver.find_element(
-                            By.XPATH, pagination_xpath
-                        )
+
+                        pagination_button = driver.find_element(By.CLASS_NAME, pagination_button_location_css)
                         # Scrollt zum Button
                         driver.execute_script(
                             "arguments[0].scrollIntoView();", pagination_button
