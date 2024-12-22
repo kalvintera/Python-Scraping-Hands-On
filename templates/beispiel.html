@@ -185,7 +185,7 @@
 
     <script>
       document.getElementById("html_button").onclick = () => {
-        const container = document.getElementById("html_container");
+        let container = document.getElementById("html_container");
 
 
         if (container.innerHTML === ""){
@@ -202,10 +202,10 @@
       let isOriginalText = true; // Flag to track the state of the text
 
       document.getElementById("css_button").onclick = () => {
-        const p_tag_css = document.querySelector("#css_container p");
+        let p_tag_css = document.querySelector("#css_container p");
 
-        const text_1 = `CSS steht für Cascading Style Sheets und ist die Sprache, mit der die visuelle Darstellung von Webseiten gestaltet wird. CSS ist die Sprache, die Webbrowsern mitteilt, wie die verschiedenen Teile einer Webseite dargestellt werden sollen<a target="_blank" class="info" href="https://html.com/css/">[Quelle]</a>`;
-        const text_2 = `CSS sollte verwendet werden, um einer Webseite Inhalte hinzuzufügen. Diese Aufgabe wird am besten von Markup-Sprachen wie HTML und XML erledigt. Stattdessen wird CSS verwendet, um Elemente auszuwählen, die bereits auf einer Webseite vorhanden sind, und um festzulegen, wie jedes Element erscheinen soll.<a target="_blank" class="info" href="https://html.com/css/">[Quelle]</a>`;
+        let text_1 = `CSS steht für Cascading Style Sheets und ist die Sprache, mit der die visuelle Darstellung von Webseiten gestaltet wird. CSS ist die Sprache, die Webbrowsern mitteilt, wie die verschiedenen Teile einer Webseite dargestellt werden sollen<a target="_blank" class="info" href="https://html.com/css/">[Quelle]</a>`;
+        let text_2 = `CSS sollte verwendet werden, um einer Webseite Inhalte hinzuzufügen. Diese Aufgabe wird am besten von Markup-Sprachen wie HTML und XML erledigt. Stattdessen wird CSS verwendet, um Elemente auszuwählen, die bereits auf einer Webseite vorhanden sind, und um festzulegen, wie jedes Element erscheinen soll.<a target="_blank" class="info" href="https://html.com/css/">[Quelle]</a>`;
 
         if (isOriginalText) {
           p_tag_css.innerHTML = text_2;
@@ -217,7 +217,7 @@
       }
       // Function to generate a random color
       function getRandomColor() {
-        const letters = '0123456789ABCDEF';
+        let letters = '0123456789ABCDEF';
         let color = '#';
         for (let i = 0; i < 6; i++) {
           color += letters[Math.floor(Math.random() * 16)];
@@ -227,7 +227,7 @@
 
       // Add click event listener to the "Javascript" button
       document.getElementById("js_button").onclick = () => {
-        const jsCard = document.getElementById('js_card'); // Adjust the selector if needed
+        let jsCard = document.getElementById('js_card'); // Adjust the selector if needed
         console.log(getRandomColor())
         jsCard.style.background = getRandomColor();
       };
