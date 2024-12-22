@@ -1,3 +1,4 @@
+import random
 import time
 from typing import List
 
@@ -96,24 +97,24 @@ class HtmlParser:
         for url_dict in main_urls_list:
             articles_list = []
 
-            if url_dict["newspaper3K"] and len(url_dict["sublinks"]) > 0:
+            if url_dict.get("newspaper3K", None) and len(url_dict.get("sublinks", [])) > 0:
                 logger.info(
                     f"articles found : {len(url_dict['sublinks'])} for url {url_dict['url']}"
                 )
                 # Anzahl der Links werden manuell bestimmt
-                sublinks = (
-                    url_dict["sublinks"][:n_articles]
-                    if n_articles
-                    else url_dict["sublinks"]
-                )
 
-                for link in sublinks:
+                for link in url_dict["sublinks"]:
                     logger.info(f"downloading article : {link}")
-                    article = Article(link)
-                    article.download()
-                    time.sleep(2)
+
                     try:
+                        article = Article(link)
+
+                        # random sleep mit einem Minimum Sleep Wert von 2 Sekunden
+                        time.sleep(2 + random.randint(0, 2))
+
+                        article.download()
                         article.parse()
+
                         # Erstellen eines Dictionaries mit Artikelinformationen
                         article_dict = {
                             "name": url_dict["name"],
@@ -135,6 +136,10 @@ class HtmlParser:
                             )
                         else:
                             logger.warning("article not found!")
+
+                        if n_articles and len(articles_list) >= n_articles:
+                            break
+
                     except (Exception, newspaper.ArticleException) as err:
                         logger.error(
                             f"Something went wrong while parsing {link} - Error: {err}"
@@ -172,6 +177,6 @@ class HtmlParser:
                         f"Error reading HTML tables from {url_dict['url']}: {e}"
                     )
             else:
-                logger.warning("Pandas key not found or the value is not valid")
+                logger.warning("Pandas key not found in config dict or the value is not valid")
 
         return tables_list
